@@ -340,7 +340,7 @@ bmp_create(uint32_t width, uint32_t height, uint32_t depth)
 
 static void bmp_read_header(bmpfile_t *bmp, FILE *fp);
 static void bmp_read_dib(bmpfile_t *bmp, FILE *fp);
-static void bmp_skip_file_palette(bmpfile_t *bmp, FILE *fp);
+static void bmp_read_8bpp_file_palette(bmpfile_t *bmp, FILE *fp);
 static void bmp_8bpp_read_pixels(bmpfile_t *bmp, FILE *fp);
 
 // bmp_create_8bpp_from_file
@@ -367,10 +367,8 @@ bmpfile_t *bmp_create_8bpp_from_file(const char *filename)
   }
 
   bmp_malloc_pixels(result);
-  bmp_malloc_colors(result);
 
-  // 8-bpp files should have a standard palette, so we simply skip it.
-  bmp_skip_file_palette(result, fp);
+  bmp_read_8bpp_file_palette(result, fp);
 
   // This function will convert 8-bpp color index back to RGB
   // representation.
@@ -621,16 +619,23 @@ bmp_write_palette(bmpfile_t *bmp, FILE *fp)
   }
 }
 
-static void bmp_skip_file_palette(bmpfile_t *bmp, FILE *fp) {
+static void bmp_read_8bpp_file_palette(bmpfile_t *bmp, FILE *fp) {
   int i;
   if (bmp->dib.depth != 8) {
-    printf("ERROR: bmp_skip_file_palette does not support non 8-bpp files.");
+    printf("ERROR: bmp_read_8bpp_file_palette does not "
+           "support non 8-bpp files.");
     return;
   }
 
+  bmp->colors = malloc(sizeof(rgb_pixel_t) * bmp->dib.ncolors);
+
   rgb_pixel_t colors;
   for (i = 0; i < bmp->dib.ncolors; ++i) {
-    fread(& colors, sizeof(rgb_pixel_t), 1, fp);
+    fread(&colors, sizeof(rgb_pixel_t), 1, fp);
+    bmp->colors[i].red = colors.red;
+    bmp->colors[i].green = colors.green;
+    bmp->colors[i].blue = colors.blue;
+    bmp->colors[i].alpha = colors.alpha;
   }
 }
 
