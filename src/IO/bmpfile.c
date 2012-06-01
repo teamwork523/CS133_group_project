@@ -586,6 +586,10 @@ static void bmp_read_dib(bmpfile_t *bmp, FILE *fp) {
   fread(&(dib->nimpcolors), sizeof(uint32_t), 1, fp);
 
   if (_is_big_endian()) bmp_dib_v3_header_swap_endianess(dib);
+
+  if (dib->ncolors <= 0) {
+    bmp->dib.ncolors = uint32_pow(2, bmp->dib.depth);
+  }
 }
 
 static void
@@ -677,9 +681,10 @@ get_8bpp_color(bmpfile_t *bmp, const unsigned char color_index) {
 static void
 bmp_8bpp_read_pixels(bmpfile_t *bmp, FILE *fp) {
   unsigned char color_index = 0;
-  int32_t x = 0, y = 0, pixel_index = 0;
+  int32_t x = 0, y = 0, pixel_index = 0, padding_i = 0;
   const uint32_t width = bmp->dib.width;
   const uint32_t height = bmp->dib.height;
+  const int32_t padding = width % 4;
   const uint32_t total_pixels = width * height;
 
   for (pixel_index = 0; pixel_index < total_pixels; ++pixel_index) {
@@ -688,7 +693,17 @@ bmp_8bpp_read_pixels(bmpfile_t *bmp, FILE *fp) {
     x = pixel_index % width;
     // BMP raw data is up-side-down.
     y = height - 1 - pixel_index / width;
-    bmp_set_pixel(bmp, x, y, *pixel);
+    if (bmp_set_pixel(bmp, x, y, *pixel) == FALSE) {
+      fprintf(stderr, "ERROR: skipping (%d, %d)\n", x, y);
+    }
+
+    // Special case in 8-bpp file, skip padding 0's
+    // when the width is not a multiple of 4.
+    if ((pixel_index + 1) % width == 0) {
+      for (padding_i = 0; padding_i < padding; ++padding_i) {
+        fread(&color_index, sizeof(unsigned char), 1, fp);
+      }
+    }
   }
 }
 
