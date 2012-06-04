@@ -9,11 +9,17 @@
  *
  * Usage:
  * 1. Motion Estimation: ./imgProj -m img_path1 img_path2
+ *                       ./imgProj -mp img_path1 img_path2 (num_threads chunk_size)
  * 2. Corner Detection:  ./imgProj -c img_path1
+ *                       ./imgProj -cp img_path1 (num_threads chunk_size)
  * 3. Rotation:          ./imgProj -r img_path1 deg
+ *                       ./imgProj -rp img_path1 deg (num_threads chunk_size)
  * 4. Scaling:           ./imgProj -s img_path1 scale_fac
+ *                       ./imgProj -sp img_path1 scale_fac (num_threads chunk_size)
  * 5. Gaussian Blur:     ./imgProj -g img_path1 sigma
+ *                       ./imgProj -gp img_path1 sigma (num_threads chunk_size)
  * 6. Outline Detection: ./imgProj -o img_path1
+ *                       ./imgProj -op img_path1 (num_threads chunk_size)
  * 
  * Author: Haokun Luo
  *         Xin Zhang
