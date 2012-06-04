@@ -67,9 +67,12 @@
 // what you are doing.
 
 #include <stdio.h>
+#include <math.h>
+#include <time.h>
 #include "bmpfile.h"
 
 int main(int argc, char **argv) {
+  srand(time(NULL));
   bmpfile_t *bmp_ori = NULL, *bmp_read = NULL, *bmp_ext = NULL;
   int i, j;
   int width, height, depth;
@@ -91,13 +94,17 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  for (i = 10, j = 10; j < height; ++i, ++j) {
-    bmp_set_pixel(bmp_ori, i, j, pixel);
-    pixel.red++;
-    pixel.green++;
-    pixel.blue++;
-    bmp_set_pixel(bmp_ori, i + 1, j, pixel);
-    bmp_set_pixel(bmp_ori, i, j + 1, pixel);
+  for (i = 0; i < width; ++i) {
+    for (j = 0; j < height; ++j) {
+        bmp_set_pixel(bmp_ori, i, j, pixel);
+        pixel.red = (++pixel.red)%255;
+        pixel.green = (++pixel.green)%255;
+        //pixel.red = (rand())%255;
+        //pixel.green = (rand())%255;
+        pixel.blue = (rand())%255;
+        bmp_set_pixel(bmp_ori, i , j, pixel);
+        //bmp_set_pixel(bmp_ori, i, j + 1, pixel);
+    }
   }
 
   bmp_save(bmp_ori, argv[1]);

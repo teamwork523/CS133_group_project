@@ -24,10 +24,17 @@ int rotation(char* in_image_path, double deg){
     cosine = cos(deg_radian);
     
     // read input image
-    printf("Reach here\n");
     input_img = bmp_create_8bpp_from_file(in_image_path);
-    in_width = bmp_get_dib(input_img).width;
-    in_height = bmp_get_dib(input_img).height;
+
+    if (input_img){
+        in_width = bmp_get_width(input_img);
+        in_height = bmp_get_height(input_img);
+    }
+    else {
+        printf("Cannot read from file %s\n", in_image_path);
+        exit(1);
+    }
+ 
     printf("Read image width is %d, height is %d\n", in_width, in_height);
     
     // Assume the origin to be the left-upper corner
