@@ -76,8 +76,10 @@ int main(int argc, char **argv) {
             // assign parameters
             input_img1 = argv[2];
             input_img2 = argv[3];
-            
-            // TODO: Ding, add your code here
+            if(strcmp(argv[1], "-m") == 0)
+ 		{
+				motion_estimation(input_img1, input_img2);
+			}
             
         }
         else if (!strcmp(argv[1], "-c") || !strcmp(argv[1], "-cp")){
