@@ -130,8 +130,20 @@ int main(int argc, char **argv) {
             input_img1 = argv[2];
             deg = atof(argv[3]);
             
-            // TODO: Haokun, add your code here
-            
+            if (!strcmp(argv[1], "-r")){
+                rotation(input_img1, deg);
+            }
+            else {
+                // assigne the number of threads and chunk size
+                if (argc == 5){
+                    num_threads = atoi(argv[4]);
+                }
+                else {
+                    num_threads = atoi(argv[4]);
+                    chunk_size = atoi(argv[5]);
+                }
+                rotation_parallel(input_img1, deg, num_threads, chunk_size);
+            }
         }
         else if (!strcmp(argv[1], "-s") || !strcmp(argv[1], "-sp")){
             printf("Scaling in process ...\n");
