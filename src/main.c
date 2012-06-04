@@ -35,16 +35,25 @@
 #include "outline_det.h"
 
 void printUsage() {
+    printf("********************************************************************\n");
     printf("CS 133 Parallel & Distributed Computing Final Project\n");
     printf("-- Image Operation APIs Optimized through OpenCV\n\n");
     printf("Usage:\n");
-    printf("> To run all the operations: ./imgProj img_path1 img_path2 deg scale_fac sigma\n");
-    printf("> To run Motion Estimation only: ./imgProj -m img_path1 img_path2\n");
-    printf("> To run Corner Detection only:  ./imgProj -c img_path1\n");
-    printf("> To run Rotation only:          ./imgProj -r img_path1 deg\n");
-    printf("> To run Scaling only:           ./imgProj -s img_path1 scale_fac\n");
-    printf("> To run Gaussian Blur only:     ./imgProj -g img_path1 sigma\n");
-    printf("> To run Outline Detection only: ./imgProj -o img_path1\n");
+    printf("> To run all the operations in sequential:     ./imgProj img_path1 img_path2 deg scale_fac sigma\n");
+    printf("> To run all the operations in parallel:       ./imgProj -p img_path1 img_path2 deg scale_fac sigma\n");
+    printf("> To run Motion Estimation only in sequential: ./imgProj -m img_path1 img_path2\n");
+    printf("> To run Motion Estimation only in parallel:   ./imgProj -mp img_path1 img_path2\n");
+    printf("> To run Corner Detection only in sequential:  ./imgProj -c img_path1\n");
+    printf("> To run Corner Detection only in parallel:    ./imgProj -cp img_path1\n");
+    printf("> To run Rotation only in sequential:          ./imgProj -r img_path1 deg\n");
+    printf("> To run Rotation only in parallel:            ./imgProj -rp img_path1 deg\n");
+    printf("> To run Scaling only in sequential:           ./imgProj -s img_path1 scale_fac\n");
+    printf("> To run Scaling only in parallel:             ./imgProj -sp img_path1 scale_fac\n");
+    printf("> To run Gaussian Blur only in sequential:     ./imgProj -g img_path1 sigma\n");
+    printf("> To run Gaussian Blur only in parallel:       ./imgProj -gp img_path1 sigma\n");
+    printf("> To run Outline Detection only in sequential: ./imgProj -o img_path1\n");
+    printf("> To run Outline Detection only in parallel:   ./imgProj -op img_path1\n");
+    printf("********************************************************************\n");
 }
 
 int main(int argc, char **argv) {
@@ -58,7 +67,7 @@ int main(int argc, char **argv) {
             exit(1);
         }            
         // parse the input parameters
-        if (!strcmp(argv[1], "-m")){
+        if (!strcmp(argv[1], "-m") || !strcmp(argv[1], "-mp")){
             printf("Motion Estimation in process ...\n");
             if (argc != 4){
                 printUsage();
@@ -71,7 +80,7 @@ int main(int argc, char **argv) {
             // TODO: Ding, add your code here
             
         }
-        else if (!strcmp(argv[1], "-c")){
+        else if (!strcmp(argv[1], "-c") || !strcmp(argv[1], "-cp")){
             printf("Corner Detection in process ...\n");
             if (argc != 3){
                 printUsage();
@@ -83,7 +92,7 @@ int main(int argc, char **argv) {
             // TODO: Michael, add your code here
             
         }
-        else if (!strcmp(argv[1], "-r")){
+        else if (!strcmp(argv[1], "-r") || !strcmp(argv[1], "-rp")){
             printf("Rotation in process ...\n");
             if (argc != 4){
                 printUsage();
@@ -96,7 +105,7 @@ int main(int argc, char **argv) {
             // TODO: Haokun, add your code here
             
         }
-        else if (!strcmp(argv[1], "-s")){
+        else if (!strcmp(argv[1], "-s") || !strcmp(argv[1], "-sp")){
             printf("Scaling in process ...\n");
             if (argc != 4){
                 printUsage();
@@ -109,7 +118,7 @@ int main(int argc, char **argv) {
             // TODO: Mengyi, add your code here
             
         }
-        else if (!strcmp(argv[1], "-g")){
+        else if (!strcmp(argv[1], "-g") || !strcmp(argv[1], "-gp")){
             printf("Gasussian Blur in process ...\n");
             if (argc != 4){
                 printUsage();
@@ -122,7 +131,7 @@ int main(int argc, char **argv) {
             // TODO: Xin, add your code here
             
         }
-        else if (!strcmp(argv[1], "-o")){
+        else if (!strcmp(argv[1], "-o") || !strcmp(argv[1], "-op")){
             printf("Outline Detection in process ...\n");
             if (argc != 3){
                 printUsage();
@@ -145,12 +154,27 @@ int main(int argc, char **argv) {
                 scale_fac = atof(argv[4]);
                 sigma = atof(argv[5]);
                 
-                // TODO: Ding, add your code here
-                // TODO: Michael, add your code here
-                // TODO: Haokun, add your code here
-                // TODO: Mengyi, add your code here
-                // TODO: Xin, add your code here
-                // TODO: Ali, add your code here
+                // TODO: Ding, add your sequential code here
+                // TODO: Michael, add your sequential code here
+                // TODO: Haokun, add your sequential code here
+                // TODO: Mengyi, add your sequential code here
+                // TODO: Xin, add your sequential code here
+                // TODO: Ali, add your sequential code here
+            }
+            else if (argc == 7 && !strcmp(argv[1], "-p")){
+                // assign parameters
+                input_img1 = argv[2];
+                input_img2 = argv[3];
+                deg = atof(argv[4]);
+                scale_fac = atof(argv[5]);
+                sigma = atof(argv[6]);
+                
+                // TODO: Ding, add your parallel code here
+                // TODO: Michael, add your parallel code here
+                // TODO: Haokun, add your parallel code here
+                // TODO: Mengyi, add your parallel code here
+                // TODO: Xin, add your parallel code here
+                // TODO: Ali, add your parallel code here
             }
             else {
                 printf("Wrong option passed in or not enough parameters. Please refer the following usage.\n");
@@ -163,5 +187,6 @@ int main(int argc, char **argv) {
         printUsage();
         exit(1);
     }
+    
     return 0;   
 }
