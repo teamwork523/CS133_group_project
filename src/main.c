@@ -166,8 +166,8 @@ int main(int argc, char **argv) {
             else if(!strcmp(argv[1], "-sp"))
             {
             	if (argc == 5)
-            		num_threads = atoi(arg[4]);	
-            	image_scaling_parrallel(scale_fac, input_img1,"scaling.bmp", num_threads);
+            		num_threads = atoi(argv[4]);	
+            	image_scaling_parallel(scale_fac, input_img1,"scaling.bmp", num_threads);
             }
             //-------------------------------------------------------------------------
             //-------------------------------------------------------------------------
@@ -243,7 +243,7 @@ int main(int argc, char **argv) {
                 // --------------------Done by Mengyi Zhu---------------------------------
                 //---------------------Here is scaling operation-------------------------
                 //--------------------it will store the scaled version into scaling.bmp----
-                image_scaling_parrallel(scale_fac, input_img1,"scaling.bmp", num_threads);
+                image_scaling_parallel(scale_fac, input_img1,"scaling.bmp", num_threads);
                 //----------------------------------------------------------------------
                 //----------------------------------------------------------------------
                 // TODO: Xin, add your parallel code here
