@@ -39,26 +39,42 @@ void printUsage() {
     printf("CS 133 Parallel & Distributed Computing Final Project\n");
     printf("-- Image Operation APIs Optimized through OpenCV\n\n");
     printf("Usage:\n");
-    printf("> To run all the operations in sequential:     ./imgProj img_path1 img_path2 deg scale_fac sigma\n");
-    printf("> To run all the operations in parallel:       ./imgProj -p img_path1 img_path2 deg scale_fac sigma\n");
-    printf("> To run Motion Estimation only in sequential: ./imgProj -m img_path1 img_path2\n");
-    printf("> To run Motion Estimation only in parallel:   ./imgProj -mp img_path1 img_path2\n");
-    printf("> To run Corner Detection only in sequential:  ./imgProj -c img_path1\n");
-    printf("> To run Corner Detection only in parallel:    ./imgProj -cp img_path1\n");
-    printf("> To run Rotation only in sequential:          ./imgProj -r img_path1 deg\n");
-    printf("> To run Rotation only in parallel:            ./imgProj -rp img_path1 deg\n");
-    printf("> To run Scaling only in sequential:           ./imgProj -s img_path1 scale_fac\n");
-    printf("> To run Scaling only in parallel:             ./imgProj -sp img_path1 scale_fac\n");
-    printf("> To run Gaussian Blur only in sequential:     ./imgProj -g img_path1 sigma\n");
-    printf("> To run Gaussian Blur only in parallel:       ./imgProj -gp img_path1 sigma\n");
-    printf("> To run Outline Detection only in sequential: ./imgProj -o img_path1\n");
-    printf("> To run Outline Detection only in parallel:   ./imgProj -op img_path1\n");
+    printf("> NOTICE: parameters in parenthesis is optional\n");
+    printf("> Run all the operations in sequential:\n>\
+            ./imgProj img_path1 img_path2 deg scale_fac sigma\n");
+    printf("> Run all the operations in parallel:\n>\
+            ./imgProj -p img_path1 img_path2 deg scale_fac sigma (num_threads chunk_size)\n");
+    printf("> Run Motion Estimation in sequential:\n>\
+            ./imgProj -m img_path1 img_path2\n");
+    printf("> Run Motion Estimation in parallel:\n>\
+            ./imgProj -mp img_path1 img_path2 (num_threads chunk_size)\n");
+    printf("> Run Corner Detection in sequential:\n>\
+            ./imgProj -c img_path1\n");
+    printf("> Run Corner Detection in parallel:\n>\
+            ./imgProj -cp img_path1 (num_threads chunk_size)\n");
+    printf("> Run Rotation in sequential:\n>\
+            ./imgProj -r img_path1 deg\n");
+    printf("> Run Rotation in parallel:\n>\
+            ./imgProj -rp img_path1 deg (num_threads chunk_size)\n");
+    printf("> Run Scaling in sequential:\n>\
+            ./imgProj -s img_path1 scale_fac\n");
+    printf("> Run Scaling in parallel:\n>\
+            ./imgProj -sp img_path1 scale_fac (num_threads chunk_size)\n");
+    printf("> Run Gaussian Blur in sequential:\n>\
+            ./imgProj -g img_path1 sigma\n");
+    printf("> Run Gaussian Blur in parallel:\n>\
+            ./imgProj -gp img_path1 sigma (num_threads chunk_size)\n");
+    printf("> Run Outline Detection in sequential:\n>\
+            ./imgProj -o img_path1\n");
+    printf("> Run Outline Detection in parallel:\n>\
+            ./imgProj -op img_path1 (num_threads chunk_size)\n");
     printf("********************************************************************\n");
 }
 
 int main(int argc, char **argv) {
     char *input_img1 = NULL, *input_img2 = NULL;
     double deg = 0.0, scale_fac = 0.0, sigma = 0.0;
+    int num_threads = 1, chunk_size = 1;
     
     // check input parameters
     if (argc <= 6){
@@ -69,7 +85,7 @@ int main(int argc, char **argv) {
         // parse the input parameters
         if (!strcmp(argv[1], "-m") || !strcmp(argv[1], "-mp")){
             printf("Motion Estimation in process ...\n");
-            if (argc != 4){
+            if (argc < 4 || argc > 6){
                 printUsage();
                 exit(1);
             }
@@ -88,7 +104,7 @@ int main(int argc, char **argv) {
         }
         else if (!strcmp(argv[1], "-c") || !strcmp(argv[1], "-cp")){
             printf("Corner Detection in process ...\n");
-            if (argc != 3){
+            if (argc < 3 || argc > 5){
                 printUsage();
                 exit(1);
             }
@@ -100,7 +116,7 @@ int main(int argc, char **argv) {
         }
         else if (!strcmp(argv[1], "-r") || !strcmp(argv[1], "-rp")){
             printf("Rotation in process ...\n");
-            if (argc != 4){
+            if (argc < 4 || argc > 6){
                 printUsage();
                 exit(1);
             }
@@ -113,7 +129,7 @@ int main(int argc, char **argv) {
         }
         else if (!strcmp(argv[1], "-s") || !strcmp(argv[1], "-sp")){
             printf("Scaling in process ...\n");
-            if (argc != 4){
+            if (argc < 4 || argc > 6){
                 printUsage();
                 exit(1);
             }
@@ -126,7 +142,7 @@ int main(int argc, char **argv) {
         }
         else if (!strcmp(argv[1], "-g") || !strcmp(argv[1], "-gp")){
             printf("Gasussian Blur in process ...\n");
-            if (argc != 4){
+            if (argc < 4 || argc > 6){
                 printUsage();
                 exit(1);
             }
@@ -139,7 +155,7 @@ int main(int argc, char **argv) {
         }
         else if (!strcmp(argv[1], "-o") || !strcmp(argv[1], "-op")){
             printf("Outline Detection in process ...\n");
-            if (argc != 3){
+            if (argc < 3 || argc > 5){
                 printUsage();
                 exit(1);
             }
@@ -167,13 +183,21 @@ int main(int argc, char **argv) {
                 // TODO: Xin, add your sequential code here
                 // TODO: Ali, add your sequential code here
             }
-            else if (argc == 7 && !strcmp(argv[1], "-p")){
+            else if (argc >= 7 && argc <= 9 && !strcmp(argv[1], "-p")){
                 // assign parameters
                 input_img1 = argv[2];
                 input_img2 = argv[3];
                 deg = atof(argv[4]);
                 scale_fac = atof(argv[5]);
                 sigma = atof(argv[6]);
+                
+                if (argc == 8){
+                    num_threads = atoi(argv[7]);
+                }
+                else if (argc == 9){
+                    num_threads = atoi(argv[7]);
+                    chunk_size = atoi(argv[8]);
+                }
                 
                 // TODO: Ding, add your parallel code here
                 // TODO: Michael, add your parallel code here
