@@ -80,6 +80,10 @@ int main(int argc, char **argv) {
 			{
 				motion_estimation(input_img1, input_img2);
 			}
+			else
+			{
+				motion_estimation_parallel(input_img1, input_img2);
+			}
             
         }
         else if (!strcmp(argv[1], "-c") || !strcmp(argv[1], "-cp")){
