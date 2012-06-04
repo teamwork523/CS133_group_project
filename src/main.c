@@ -2,7 +2,7 @@
  * -- Image Operation APIs Optimized through OpenCV
  * 
  * To Compile: gcc -o imgProj main.c IO/bmpfile.c -lm
- * To Run: ./imgProj img_path1 img_path2 deg scale_fac sigma
+ * To Run all operations: ./imgProj img_path1 img_path2 deg scale_fac sigma
  * 
  * If you want to compile for each operation seperately,
  * you can run the program with secific options as following usages.
@@ -48,6 +48,9 @@ void printUsage() {
 }
 
 int main(int argc, char **argv) {
+    char *input_img1 = NULL, *input_img2 = NULL;
+    double deg = 0.0, scale_fac = 0.0, sigma = 0.0;
+    
     // check input parameters
     if (argc <= 6){
         if (argc < 2){
@@ -56,26 +59,98 @@ int main(int argc, char **argv) {
         }            
         // parse the input parameters
         if (!strcmp(argv[1], "-m")){
-            printf("Motion Estimation\n");
+            printf("Motion Estimation in process ...\n");
+            if (argc != 4){
+                printUsage();
+                exit(1);
+            }
+            // assign parameters
+            input_img1 = argv[2];
+            input_img2 = argv[3];
+            
+            // TODO: Ding, add your code here
+            
         }
         else if (!strcmp(argv[1], "-c")){
-            printf("Corner Detection\n");
+            printf("Corner Detection in process ...\n");
+            if (argc != 3){
+                printUsage();
+                exit(1);
+            }
+            // assign parameters
+            input_img1 = argv[2];
+            
+            // TODO: Michael, add your code here
+            
         }
         else if (!strcmp(argv[1], "-r")){
-            printf("Rotation\n");
+            printf("Rotation in process ...\n");
+            if (argc != 4){
+                printUsage();
+                exit(1);
+            }
+            // assign parameters
+            input_img1 = argv[2];
+            deg = atof(argv[3]);
+            
+            // TODO: Haokun, add your code here
+            
         }
         else if (!strcmp(argv[1], "-s")){
-            printf("Scaling\n");
+            printf("Scaling in process ...\n");
+            if (argc != 4){
+                printUsage();
+                exit(1);
+            }
+            // assign parameters
+            input_img1 = argv[2];
+            scale_fac = atof(argv[3]);
+            
+            // TODO: Mengyi, add your code here
+            
         }
         else if (!strcmp(argv[1], "-g")){
-            printf("Gasussian Blur\n");
+            printf("Gasussian Blur in process ...\n");
+            if (argc != 4){
+                printUsage();
+                exit(1);
+            }
+            // assign parameters
+            input_img1 = argv[2];
+            sigma = atof(argv[3]);
+            
+            // TODO: Xin, add your code here
+            
         }
         else if (!strcmp(argv[1], "-o")){
-            printf("Outline Detection\n");
+            printf("Outline Detection in process ...\n");
+            if (argc != 3){
+                printUsage();
+                exit(1);
+            }
+            // assign parameters
+            input_img1 = argv[2];
+            
+            // TODO: Ali, add your code here
+            
         }
         else {
             if (argc == 6){
-                printf("All-in-one\n");
+                printf("All-in-one in process ...\n");
+                
+                // assign parameters
+                input_img1 = argv[1];
+                input_img2 = argv[2];
+                deg = atof(argv[3]);
+                scale_fac = atof(argv[4]);
+                sigma = atof(argv[5]);
+                
+                // TODO: Ding, add your code here
+                // TODO: Michael, add your code here
+                // TODO: Haokun, add your code here
+                // TODO: Mengyi, add your code here
+                // TODO: Xin, add your code here
+                // TODO: Ali, add your code here
             }
             else {
                 printf("Wrong option passed in or not enough parameters. Please refer the following usage.\n");
