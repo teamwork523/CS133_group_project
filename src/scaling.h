@@ -1,7 +1,7 @@
-include<omp.h>
-include<stdio>
-include<stdlib>
-include"bmpfile.h"
+#include<omp.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include"IO/bmpfile.h"
 
 
 
