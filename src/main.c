@@ -151,11 +151,26 @@ int main(int argc, char **argv) {
                 printUsage();
                 exit(1);
             }
+            
+            // --------------------Done by Mengyi Zhu----------------------------------
+            //---------------------Here is scaling operation---------------------------
+            //--------------------it will store the scaled version into scaling.bmp----
             // assign parameters
             input_img1 = argv[2];
             scale_fac = atof(argv[3]);
+            num_threads = 1;
             
-            // TODO: Mengyi, add your code here
+            //---------------------implemention the operation--------------------------
+            if (!strcmp(argv[1], "-s"))
+            	image_scaling(scale_fac, input_img1,"scaling.bmp");
+            else if(!strcmp(argv[1], "-sp"))
+            {
+            	if (argc == 5)
+            		num_threads = atoi(argv[4]);	
+            	image_scaling_parallel(scale_fac, input_img1,"scaling.bmp", num_threads);
+            }
+            //-------------------------------------------------------------------------
+            //-------------------------------------------------------------------------
             
         }
         else if (!strcmp(argv[1], "-g") || !strcmp(argv[1], "-gp")){
@@ -197,7 +212,12 @@ int main(int argc, char **argv) {
                 // TODO: Ding, add your sequential code here
                 // TODO: Michael, add your sequential code here
                 // TODO: Haokun, add your sequential code here
-                // TODO: Mengyi, add your sequential code here
+                // --------------------Done by Mengyi Zhu---------------------------------
+                //---------------------Here is scaling operation--------------------------
+                //--------------------it will store the scaled version into scaling.bmp---
+                image_scaling(scale_fac, input_img1,"scaling.bmp");
+                //------------------------------------------------------------------------
+                //------------------------------------------------------------------------
                 // TODO: Xin, add your sequential code here
                 // TODO: Ali, add your sequential code here
             }
@@ -220,7 +240,12 @@ int main(int argc, char **argv) {
                 // TODO: Ding, add your parallel code here
                 // TODO: Michael, add your parallel code here
                 // TODO: Haokun, add your parallel code here
-                // TODO: Mengyi, add your parallel code here
+                // --------------------Done by Mengyi Zhu---------------------------------
+                //---------------------Here is scaling operation-------------------------
+                //--------------------it will store the scaled version into scaling.bmp----
+                image_scaling_parallel(scale_fac, input_img1,"scaling.bmp", num_threads);
+                //----------------------------------------------------------------------
+                //----------------------------------------------------------------------
                 // TODO: Xin, add your parallel code here
                 // TODO: Ali, add your parallel code here
             }
