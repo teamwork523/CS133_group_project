@@ -6,9 +6,9 @@
 #include <math.h>
 #include "IO/bmpfile.h"
 
-double gaussian_func (int x, int y, double sigma){
+double gaussian_func (double x, double y, double sigma){
     const double PI = atan(1.0)*4;
-    return 1.0/(2*PI*sigma*sigma)*exp(-(x*x+y*y)/(2.0*sigma*sigma));
+    return 1.0/(2*PI*sigma*sigma)*exp(-((x*x+y*y)*1.0/(2.0*sigma*sigma)));
 }
 
 int gaussian_blur (char* in_image_path, double sigma){
@@ -37,7 +37,8 @@ int gaussian_blur (char* in_image_path, double sigma){
     //  apply Gaussian Blur
     for (j = 0; j < height; ++j){
         for (i = 0; i < width; ++i){
-            double g_val = gaussian_func(i-width/2, j-height/2, sigma);
+            double g_val = gaussian_func((i*1.0/width-0.5)*sigma, (j*1.0/height-0.5)*sigma, sigma);
+            //printf("Current scalar is %lf\n", g_val);
             rgb_pixel_t *pixel = bmp_get_pixel(input_img, i, j);
             pixel->red *= g_val;
             pixel->green *= g_val;
