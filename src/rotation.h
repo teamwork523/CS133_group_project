@@ -84,7 +84,7 @@ int rotation(char* in_image_path, double deg){
         }
     }
     
-    bmp_save(output_img, "bmp_rotation.bmp");
+    bmp_save(output_img, "bmp_rotation_seq.bmp");
     
     bmp_destroy(input_img);
     bmp_destroy(output_img);
