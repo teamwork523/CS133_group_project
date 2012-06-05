@@ -208,8 +208,7 @@ int main(int argc, char **argv) {
                     chunk_size = atoi(argv[5]);
                 }
                 gaussian_blur_parallel(input_img1, sigma, num_threads, chunk_size);
-            }
-            
+            }            
         }
         else if (!strcmp(argv[1], "-o") || !strcmp(argv[1], "-op")){
             printf("Outline Detection in process ...\n");
