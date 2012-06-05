@@ -1,5 +1,5 @@
 /* CS 133 Parallel & Distributed Computing Final Project 
- * -- Image Operation APIs Optimized through OpenCV
+ * -- Image Operation APIs Optimized through OpenMP
  * 
  * To Compile: gcc -fopenmp -o imgProj main.c IO/bmpfile.c -lm
  * To Run all operations: ./imgProj img_path1 img_path2 deg scale_fac sigma
@@ -43,7 +43,7 @@
 void printUsage() {
     printf("********************************************************************\n");
     printf("CS 133 Parallel & Distributed Computing Final Project\n");
-    printf("-- Image Operation APIs Optimized through OpenCV\n\n");
+    printf("-- Image Operation APIs Optimized through OpenMP\n\n");
     printf("Usage:\n");
     printf("> NOTICE: parameters in parenthesis is optional\n");
     printf("> Run all the operations in sequential:\n>\
