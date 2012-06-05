@@ -195,7 +195,20 @@ int main(int argc, char **argv) {
             input_img1 = argv[2];
             sigma = atof(argv[3]);
             
-            // TODO: Xin, add your code here
+            if (!strcmp(argv[1], "-g")){
+                gaussian_blur(input_img1, sigma);
+            }
+            else {
+                // assigne the number of threads and chunk size
+                if (argc == 5){
+                    num_threads = atoi(argv[4]);
+                }
+                else {
+                    num_threads = atoi(argv[4]);
+                    chunk_size = atoi(argv[5]);
+                }
+                gaussian_blur_parallel(input_img1, sigma, num_threads, chunk_size);
+            }
             
         }
         else if (!strcmp(argv[1], "-o") || !strcmp(argv[1], "-op")){
@@ -231,7 +244,8 @@ int main(int argc, char **argv) {
                 image_scaling(scale_fac, input_img1,"scaling.bmp");
                 //------------------------------------------------------------------------
                 //------------------------------------------------------------------------
-                // TODO: Xin, add your sequential code here
+                // Xin, add your sequential code here
+                gaussian_blur(input_img1, sigma);
                 // TODO: Ali, add your sequential code here
             }
             else if (argc >= 7 && argc <= 9 && !strcmp(argv[1], "-p")){
@@ -260,7 +274,8 @@ int main(int argc, char **argv) {
                 image_scaling_parallel(scale_fac, input_img1,"scaling.bmp", num_threads);
                 //----------------------------------------------------------------------
                 //----------------------------------------------------------------------
-                // TODO: Xin, add your parallel code here
+                // Xin, add your parallel code here
+                gaussian_blur_parallel(input_img1, sigma, num_threads, chunk_size);
                 // TODO: Ali, add your parallel code here
             }
             else {
