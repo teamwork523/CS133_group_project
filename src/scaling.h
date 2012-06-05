@@ -1,3 +1,5 @@
+#ifndef SCALING_H
+#define SCALING_H
 #include<omp.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -56,6 +58,8 @@ int image_scaling(double ratio,char* old_name, char* name){
         }
 	}
 	bmp_save(bmp_rsz, name);
+	bmp_destroy(bmp_read);
+    	bmp_destroy(bmp_rsz);
 	return 0;
   }
   return 1;
@@ -118,7 +122,10 @@ int image_scaling_parallel(double ratio,char* old_name, char* name, int num_thre
         }
 	}
 	bmp_save(bmp_rsz, name);
+	bmp_destroy(bmp_read);
+    	bmp_destroy(bmp_rsz);
 	return 0;
   }
   return 1;
 }
+#end if
