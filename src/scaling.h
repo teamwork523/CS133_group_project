@@ -128,4 +128,4 @@ int image_scaling_parallel(double ratio,char* old_name, char* name, int num_thre
   }
   return 1;
 }
-#end if
+#endif

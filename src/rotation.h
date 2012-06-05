@@ -84,7 +84,7 @@ int rotation(char* in_image_path, double deg){
         }
     }
     
-    bmp_save(output_img, "bmp_rotation.bmp");
+    bmp_save(output_img, "bmp_rotation_seq.bmp");
     
     bmp_destroy(input_img);
     bmp_destroy(output_img);
@@ -155,9 +155,9 @@ int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int c
     // set the number of thread
     omp_set_num_threads(num_of_threads);
     
-    int i,j;
-    #pragma omp parallel private(i,j)
+    #pragma omp parallel shared(out_width, out_height, minx, miny, output_img)
     {
+        int i,j;
         #pragma omp for schedule(dynamic, chunk_size) nowait
         for (i = 0; i < out_width; ++i){
             for (j = 0; j < out_height; ++j){
@@ -173,7 +173,7 @@ int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int c
         }
     }
     
-    bmp_save(output_img, "bmp_rotation.bmp");
+    bmp_save(output_img, "bmp_rotation_parallel.bmp");
     
     bmp_destroy(input_img);
     bmp_destroy(output_img);
