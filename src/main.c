@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 			}
 			else
 			{
-				motion_estimation_parallel(input_img1, input_img2);
+				motion_estimation_parallel(input_img1, 8);
 			}
             
         }
@@ -117,7 +117,19 @@ int main(int argc, char **argv) {
             // assign parameters
             input_img1 = argv[2];
             
-            // TODO: Michael, add your code here
+			 if(strcmp(argv[1], "-c") == 0)
+			{
+				cornerDetectionSequential(input_img1);
+			}
+			else
+			{
+				num_threads = 8;
+                if (argc == 4){
+                    num_threads = atoi(argv[3]);
+                }
+				cornerDetectionParallel(input_img1, num_threads);
+			}
+
             
         }
         else if (!strcmp(argv[1], "-r") || !strcmp(argv[1], "-rp")){
@@ -210,7 +222,8 @@ int main(int argc, char **argv) {
                 sigma = atof(argv[5]);
                 
                 // TODO: Ding, add your sequential code here
-                // TODO: Michael, add your sequential code here
+                // Michael's sequential code here
+				cornerDetectionSequential(input_img1);
                 // TODO: Haokun, add your sequential code here
                 // --------------------Done by Mengyi Zhu---------------------------------
                 //---------------------Here is scaling operation--------------------------
@@ -239,6 +252,7 @@ int main(int argc, char **argv) {
                 
                 // TODO: Ding, add your parallel code here
                 // TODO: Michael, add your parallel code here
+				cornerDetectionParallel(input_img1,num_threads);
                 // TODO: Haokun, add your parallel code here
                 // --------------------Done by Mengyi Zhu---------------------------------
                 //---------------------Here is scaling operation-------------------------
