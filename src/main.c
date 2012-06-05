@@ -221,10 +221,12 @@ int main(int argc, char **argv) {
                 scale_fac = atof(argv[4]);
                 sigma = atof(argv[5]);
                 
-                // TODO: Ding, add your sequential code here
+                // Ding, add your sequential code here
+                motion_estimation(input_img1, input_img2);
                 // Michael's sequential code here
 				cornerDetectionSequential(input_img1);
-                // TODO: Haokun, add your sequential code here
+                // Haokun, add your sequential code here
+                rotation(input_img1, deg);
                 // --------------------Done by Mengyi Zhu---------------------------------
                 //---------------------Here is scaling operation--------------------------
                 //--------------------it will store the scaled version into scaling.bmp---
@@ -250,10 +252,12 @@ int main(int argc, char **argv) {
                     chunk_size = atoi(argv[8]);
                 }
                 
-                // TODO: Ding, add your parallel code here
-                // TODO: Michael, add your parallel code here
+                // Ding, add your parallel code here
+                motion_estimation_parallel(input_img1, input_img2);
+                // Michael, add your parallel code here
 				cornerDetectionParallel(input_img1,num_threads);
-                // TODO: Haokun, add your parallel code here
+                // Haokun, add your parallel code here
+                rotation_parallel(input_img1, deg, num_threads, chunk_size);
                 // --------------------Done by Mengyi Zhu---------------------------------
                 //---------------------Here is scaling operation-------------------------
                 //--------------------it will store the scaled version into scaling.bmp----
