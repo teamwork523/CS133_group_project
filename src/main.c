@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
 			}
 			else
 			{
-				motion_estimation_parallel(input_img1, 8);
+				motion_estimation_parallel(input_img1, input_img2);
 			}
             
         }

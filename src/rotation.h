@@ -33,7 +33,7 @@ int rotation(char* in_image_path, double deg){
     
     // read input image
     input_img = bmp_create_8bpp_from_file(in_image_path);
-    bmp_save(input_img, "bmp_rotation_read.bmp");
+    //bmp_save(input_img, "bmp_rotation_read.bmp");
 
     if (input_img){
         in_width = bmp_get_width(input_img);
@@ -115,7 +115,7 @@ int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int c
     
     // read input image
     input_img = bmp_create_8bpp_from_file(in_image_path);
-    bmp_save(input_img, "bmp_rotation_read.bmp");
+    //bmp_save(input_img, "bmp_rotation_read.bmp");
 
     if (input_img){
         in_width = bmp_get_width(input_img);
