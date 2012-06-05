@@ -53,9 +53,41 @@ int rotation(char* in_image_path, double deg){
     out_height = (int)abs(maxy - miny);
     
     printf("New width is %d, new height is %d\n", out_width, out_height);
+    
+    // apply rotation operation
+    output_img = bmp_create(out_width, out_height, 8);
+    if (!output_img) {
+        printf("Fail to create rotation output image!\n");
+        exit(1);
+    }
+    
+    int i,j;
+    for (i = 0; i < out_width; ++i){
+        for (j = 0; j < out_height; ++j){
+            int src_x = (int)((i+minx)*cosine+(j+miny)*sine);
+            int src_y = (int)((j+miny)*cosine-(i+minx)*sine);
+            if (src_x >= 0 && src_x < in_width && src_y >= 0 && src_y < in_height){
+                rgb_pixel_t *pixel = bmp_get_pixel(input_img, src_x, src_y);
+                bmp_set_pixel(output_img, i, j, *pixel);
+            }
+        }
+    }
+    
+    bmp_save(output_img, "rotation.bmp");
+    
+    bmp_destroy(input_img);
+    bmp_destroy(output_img);
+    
+    return 0;
 }
 
 int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int chunk_size){
 }
 
 #endif
+
+
+
+
+
+
