@@ -1,7 +1,7 @@
 /* CS 133 Parallel & Distributed Computing Final Project 
  * -- Image Operation APIs Optimized through OpenCV
  * 
- * To Compile: gcc -o imgProj main.c IO/bmpfile.c -lm
+ * To Compile: gcc -fopenmp -o imgProj main.c IO/bmpfile.c -lm
  * To Run all operations: ./imgProj img_path1 img_path2 deg scale_fac sigma
  * 
  * If you want to compile for each operation seperately,
