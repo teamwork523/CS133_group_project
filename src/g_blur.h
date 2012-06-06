@@ -4,6 +4,7 @@
 #include <omp.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include "IO/bmpfile.h"
 
 #define MTX_ROW 7
@@ -19,7 +20,7 @@ double gaussian_func (int x, int y, double sigma){
 }
 
 // generate a 3*3 kernal matrix based on sigma
-double* gen_gaussian_kernal (double* g_matrix, double sigma){
+double* gen_gaussian_kernal (double* g_matrix, double sigma){    
     int i,j;
     for (j = 0; j < MTX_ROW; ++j){
         for (i = 0; i < MTX_COL; ++i){
@@ -30,6 +31,9 @@ double* gen_gaussian_kernal (double* g_matrix, double sigma){
 }
 
 int gaussian_blur (char* in_image_path, double sigma){
+    // start timer
+    clock_t start = clock();
+    
     bmpfile_t *input_img = NULL, *output_img = NULL;
     int width = 0, height = 0, i, j, row, col, index;
     
@@ -81,6 +85,10 @@ int gaussian_blur (char* in_image_path, double sigma){
     //double clr_sum;
     int count;
     
+    // Print the time before main loop
+    clock_t checkpoint1 = clock();
+    printf("It takes %.3fs before main loop\n", ((float)( checkpoint1 - start )) / CLOCKS_PER_SEC );
+    
     for (j = 0; j < height; ++j){
         for (i = 0; i < width; ++i){
             // clear up the sum
@@ -120,6 +128,11 @@ int gaussian_blur (char* in_image_path, double sigma){
         }
     }
     
+    // Print the time after main loop
+    clock_t checkpoint2 = clock();
+    printf("It takes %.3fs right after main loop\n", ((float)( checkpoint2 - start )) / CLOCKS_PER_SEC );
+    printf("It takes %.3fs to finish main loop\n", ((float)( checkpoint2 - checkpoint1 )) / CLOCKS_PER_SEC );
+    
     // save the image
     bmp_save(output_img, "gaussian_blur_seq.bmp");
     
@@ -130,10 +143,24 @@ int gaussian_blur (char* in_image_path, double sigma){
     if (g_mtx)      free(g_mtx);
     //if (gray_mtx)   free(gray_mtx);
     
+    // Print the time after save image
+    clock_t checkpoint3 = clock();
+    printf("It takes %.3fs right after saving image to local disk\n", ((float)( checkpoint3 - start )) / CLOCKS_PER_SEC );
+    printf("It takes %.3fs to finish saving image\n", ((float)( checkpoint3 - checkpoint2 )) / CLOCKS_PER_SEC );
+    printf("The ratio between saving and loop is %f : %d\n",  ((float)( checkpoint3 - checkpoint2 ))/( checkpoint2 - checkpoint1 ), 1 );
+    
     return 0;
 }
 
 int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_threads, int chunk_size){
+    struct timespec start, checkpoint1, checkpoint2, checkpoint3;
+    // start timer
+    if (clock_gettime( CLOCK_REALTIME, &start) == -1){
+        printf("Fail to fetch start time\n");
+        exit(1);
+    }
+    //printf("Start time is %.3f\n", (float)start.tv_sec);
+    
     bmpfile_t *input_img = NULL, *output_img = NULL;
     int width = 0, height = 0;
     
@@ -177,6 +204,14 @@ int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_thread
         printf("Fail to create rotation output image!\n");
         exit(1);
     }
+    
+    // Print the time before main loop
+    if (clock_gettime( CLOCK_REALTIME, &checkpoint1) == -1){
+        printf("Fail to fetch first checkpoint time\n");
+        exit(1);
+    }
+    //printf("Checkpoint 1 time is %.3f\n", (float)checkpoint1.tv_sec);
+    printf("It takes %.3fs before main loop\n", ((float)( checkpoint1.tv_sec - start.tv_sec )) / CLOCKS_PER_SEC );
     
     //  apply Gaussian Blur
     // set the number of thread
@@ -222,6 +257,15 @@ int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_thread
         }
     }
     
+    // Print the time after main loop
+    if (clock_gettime( CLOCK_REALTIME, &checkpoint2) == -1){
+        printf("Fail to fetch the second checkpoint time\n");
+        exit(1);
+    }
+    //printf("Checkpoint 2 time is %.3f\n", (float)checkpoint2.tv_sec);
+    printf("It takes %.3fs right after main loop\n", ((float)( checkpoint2.tv_sec - start.tv_sec )) / CLOCKS_PER_SEC );
+    printf("It takes %.3fs to finish main loop\n", ((float)( checkpoint2.tv_sec - checkpoint1.tv_sec )) / CLOCKS_PER_SEC );
+    
     // save the image
     bmp_save(output_img, "gaussian_blur_parallel.bmp");
     
@@ -230,6 +274,16 @@ int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_thread
     
     // free dynamic memory
     if (g_mtx)      free(g_mtx);
+    
+    // Print the time after save image
+    if (clock_gettime( CLOCK_REALTIME, &checkpoint3) == -1){
+        printf("Fail to fetch the third checkpoint time\n");
+        exit(1);
+    }
+    //printf("Checkpoint 3 time is %.3f\n", (float)checkpoint3.tv_sec);
+    printf("It takes %.3fs right after saving image to local disk\n", ((float)( checkpoint3.tv_sec - start.tv_sec )) / CLOCKS_PER_SEC );
+    printf("It takes %.3fs to finish saving image\n", ((float)( checkpoint3.tv_sec - checkpoint2.tv_sec )) / CLOCKS_PER_SEC );
+    printf("The ratio between saving and loop is %f : %d\n",  ((float)( checkpoint3.tv_sec - checkpoint2.tv_sec ))/( checkpoint2.tv_sec - checkpoint1.tv_sec ), 1 );
     
     return 0;
 }
