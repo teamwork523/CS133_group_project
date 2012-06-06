@@ -151,7 +151,6 @@ int motion_estimation(char* input_img1, char* input_img2)
 int motion_estimation_parallel(char* input_img1, char* input_img2, int num_threads)
 {
 
-	omp_set_num_threads(num_threads);
 	const int BLOCK_SIZE = 16;
 	bmpfile_t *bmp1 = NULL, *bmp2 = NULL, *bmp_out = NULL;
 	int row,col;
@@ -191,6 +190,7 @@ int motion_estimation_parallel(char* input_img1, char* input_img2, int num_threa
 		}
 	}
 
+	omp_set_num_threads(num_threads);
 	#pragma omp parallel private(row, col, sad, sad_min, i,j,k,m,p,q,k1,m1,p1,q1, diff)
 	{
 		sad = 0;
