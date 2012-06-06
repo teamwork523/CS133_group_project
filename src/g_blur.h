@@ -9,10 +9,24 @@
 
 #define MTX_ROW 7
 #define MTX_COL 7
+#define BILLION 1000000000.0
 
 // min/max macro
 #define min(a, b)  (((a) < (b)) ? (a) : (b)) 
 #define max(a, b)  (((a) > (b)) ? (a) : (b))
+
+struct timespec diff_timespec(struct timespec start, struct timespec end)
+{
+	struct timespec temp;
+	if ((end.tv_nsec-start.tv_nsec)<0) {
+		temp.tv_sec = end.tv_sec-start.tv_sec-1;
+		temp.tv_nsec = BILLION+end.tv_nsec-start.tv_nsec;
+	} else {
+		temp.tv_sec = end.tv_sec-start.tv_sec;
+		temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+	}
+	return temp;
+}
 
 double gaussian_func (int x, int y, double sigma){
     const double PI = atan(1.0)*4;
@@ -87,7 +101,8 @@ int gaussian_blur (char* in_image_path, double sigma){
     
     // Print the time before main loop
     clock_t checkpoint1 = clock();
-    printf("It takes %.3fs before main loop\n", ((float)( checkpoint1 - start )) / CLOCKS_PER_SEC );
+    double setup_time = checkpoint1 - start;
+    printf("Setup time is %.3lfs\n", setup_time / CLOCKS_PER_SEC );
     
     for (j = 0; j < height; ++j){
         for (i = 0; i < width; ++i){
@@ -130,8 +145,8 @@ int gaussian_blur (char* in_image_path, double sigma){
     
     // Print the time after main loop
     clock_t checkpoint2 = clock();
-    printf("It takes %.3fs right after main loop\n", ((float)( checkpoint2 - start )) / CLOCKS_PER_SEC );
-    printf("It takes %.3fs to finish main loop\n", ((float)( checkpoint2 - checkpoint1 )) / CLOCKS_PER_SEC );
+    double loop_time = checkpoint2 - checkpoint1;
+    printf("Loop time is %.3lfs\n", loop_time / CLOCKS_PER_SEC );
     
     // save the image
     bmp_save(output_img, "gaussian_blur_seq.bmp");
@@ -145,21 +160,17 @@ int gaussian_blur (char* in_image_path, double sigma){
     
     // Print the time after save image
     clock_t checkpoint3 = clock();
-    printf("It takes %.3fs right after saving image to local disk\n", ((float)( checkpoint3 - start )) / CLOCKS_PER_SEC );
-    printf("It takes %.3fs to finish saving image\n", ((float)( checkpoint3 - checkpoint2 )) / CLOCKS_PER_SEC );
-    printf("The ratio between saving and loop is %f : %d\n",  ((float)( checkpoint3 - checkpoint2 ))/( checkpoint2 - checkpoint1 ), 1 );
+    double save_time = checkpoint3 - checkpoint2;
+    printf("Save time is %.3lfs\n", save_time / CLOCKS_PER_SEC );
+    printf("The ratio between saving and loop is %.3lf:1\n",  save_time/loop_time );
     
     return 0;
 }
 
 int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_threads, int chunk_size){
-    struct timespec start, checkpoint1, checkpoint2, checkpoint3;
-    // start timer
-    if (clock_gettime( CLOCK_REALTIME, &start) == -1){
-        printf("Fail to fetch start time\n");
-        exit(1);
-    }
-    //printf("Start time is %.3f\n", (float)start.tv_sec);
+    // define time struct
+    struct timespec start, end_setup, end_loop, end_save;
+    clock_gettime( CLOCK_REALTIME, &start);
     
     bmpfile_t *input_img = NULL, *output_img = NULL;
     int width = 0, height = 0;
@@ -205,13 +216,11 @@ int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_thread
         exit(1);
     }
     
-    // Print the time before main loop
-    if (clock_gettime( CLOCK_REALTIME, &checkpoint1) == -1){
-        printf("Fail to fetch first checkpoint time\n");
-        exit(1);
-    }
-    //printf("Checkpoint 1 time is %.3f\n", (float)checkpoint1.tv_sec);
-    printf("It takes %.3fs before main loop\n", ((float)( checkpoint1.tv_sec - start.tv_sec )) / CLOCKS_PER_SEC );
+    // before loop
+    clock_gettime( CLOCK_REALTIME, &end_setup);
+    struct timespec diff_time = diff_timespec(start, end_setup);
+    //diff_time = end_setup.tv_sec + end_setup.tv_nsec/BILLION - start.tv_sec - start.tv_nsec/BILLION;
+    printf("Setup time is %.3lfs\n", (double)(diff_time.tv_sec+diff_time.tv_nsec/BILLION));
     
     //  apply Gaussian Blur
     // set the number of thread
@@ -257,14 +266,11 @@ int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_thread
         }
     }
     
-    // Print the time after main loop
-    if (clock_gettime( CLOCK_REALTIME, &checkpoint2) == -1){
-        printf("Fail to fetch the second checkpoint time\n");
-        exit(1);
-    }
-    //printf("Checkpoint 2 time is %.3f\n", (float)checkpoint2.tv_sec);
-    printf("It takes %.3fs right after main loop\n", ((float)( checkpoint2.tv_sec - start.tv_sec )) / CLOCKS_PER_SEC );
-    printf("It takes %.3fs to finish main loop\n", ((float)( checkpoint2.tv_sec - checkpoint1.tv_sec )) / CLOCKS_PER_SEC );
+    // after loop
+    clock_gettime( CLOCK_REALTIME, &end_loop);
+    struct timespec loop_time = diff_timespec(end_setup, end_loop);
+    //double loop_time = end_loop.tv_sec + end_loop.tv_nsec/BILLION - end_setup.tv_sec - end_setup.tv_nsec/BILLION;
+    printf("Loop time is %.3lfs\n", (double)(loop_time.tv_sec+loop_time.tv_nsec/BILLION));
     
     // save the image
     bmp_save(output_img, "gaussian_blur_parallel.bmp");
@@ -275,15 +281,12 @@ int gaussian_blur_parallel (char* in_image_path, double sigma, int num_of_thread
     // free dynamic memory
     if (g_mtx)      free(g_mtx);
     
-    // Print the time after save image
-    if (clock_gettime( CLOCK_REALTIME, &checkpoint3) == -1){
-        printf("Fail to fetch the third checkpoint time\n");
-        exit(1);
-    }
-    //printf("Checkpoint 3 time is %.3f\n", (float)checkpoint3.tv_sec);
-    printf("It takes %.3fs right after saving image to local disk\n", ((float)( checkpoint3.tv_sec - start.tv_sec )) / CLOCKS_PER_SEC );
-    printf("It takes %.3fs to finish saving image\n", ((float)( checkpoint3.tv_sec - checkpoint2.tv_sec )) / CLOCKS_PER_SEC );
-    printf("The ratio between saving and loop is %f : %d\n",  ((float)( checkpoint3.tv_sec - checkpoint2.tv_sec ))/( checkpoint2.tv_sec - checkpoint1.tv_sec ), 1 );
+    // after saving image
+    clock_gettime( CLOCK_REALTIME, &end_save);
+    struct timespec save_time = diff_timespec(end_loop, end_save);
+    //double save_time = end_save.tv_sec + end_save.tv_nsec/BILLION - end_loop.tv_sec - end_loop.tv_nsec/BILLION;
+    printf("Save time is %.3lfs\n", (double)(save_time.tv_sec+save_time.tv_nsec/BILLION));
+    printf("The ratio between saving and loop is  %.3lf:1\n", ((double)(save_time.tv_sec+save_time.tv_nsec/BILLION))/((double)(loop_time.tv_sec+loop_time.tv_nsec/BILLION)));
     
     return 0;
 }
