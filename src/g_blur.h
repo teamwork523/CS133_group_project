@@ -56,12 +56,12 @@ int gaussian_blur (char* in_image_path, double sigma){
     g_mtx = gen_gaussian_kernal(g_mtx, sigma);
     
     // output the matrix
-    /*for (row = 0; row < MTX_ROW; row++){
+    for (row = 0; row < MTX_ROW; row++){
         for (col = 0; col < MTX_COL; col++){
-            printf("%lf ", g_mtx[row*MTX_COL+col]);
+            printf("%lf  ", g_mtx[row*MTX_COL+col]);
         }
         printf("\n");
-    }*/
+    }
     
     // read from file
     input_img = bmp_create_8bpp_from_file(in_image_path);
