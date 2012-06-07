@@ -10,7 +10,7 @@
 
 int motion_estimation(char* input_img1, char* input_img2)
 {
-	const int BLOCK_SIZE = 16;
+	int BLOCK_SIZE = 16;
 	bmpfile_t *bmp1 = NULL, *bmp2 = NULL, *bmp_out = NULL;
 	int row,col;
 	int total_loops,sad;
@@ -24,9 +24,19 @@ int motion_estimation(char* input_img1, char* input_img2)
 	bmp2 = bmp_create_8bpp_from_file(input_img2);
 	
 	int width = bmp_get_width(bmp1);
-	int mb_width = width / BLOCK_SIZE;
-	
+
 	int height = bmp_get_height(bmp1);
+	
+	if(width % BLOCK_SIZE != 0 || height % BLOCK_SIZE != 0)
+	{
+		for(i = 30; i > 1; i--)
+		{
+			if(width % BLOCK_SIZE == 0 && height % BLOCK_SIZE == 0)
+				break;
+		}
+		BLOCK_SIZE = i;
+	}
+	int mb_width = width / BLOCK_SIZE;
 	int mb_height = height / BLOCK_SIZE;
 
 	
@@ -151,7 +161,7 @@ int motion_estimation(char* input_img1, char* input_img2)
 int motion_estimation_parallel(char* input_img1, char* input_img2, int num_threads)
 {
 
-	const int BLOCK_SIZE = 16;
+	int BLOCK_SIZE = 16;
 	bmpfile_t *bmp1 = NULL, *bmp2 = NULL, *bmp_out = NULL;
 	int row,col;
 	int total_loops,sad;
@@ -165,9 +175,19 @@ int motion_estimation_parallel(char* input_img1, char* input_img2, int num_threa
 	bmp2 = bmp_create_8bpp_from_file(input_img2);
 	
 	int width = bmp_get_width(bmp1);
-	int mb_width = width / BLOCK_SIZE;
-	
+
 	int height = bmp_get_height(bmp1);
+	
+	if(width % BLOCK_SIZE != 0 || height % BLOCK_SIZE != 0)
+	{
+		for(i = 30; i > 1; i--)
+		{
+			if(width % BLOCK_SIZE == 0 && height % BLOCK_SIZE == 0)
+				break;
+		}
+		BLOCK_SIZE = i;
+	}
+	int mb_width = width / BLOCK_SIZE;
 	int mb_height = height / BLOCK_SIZE;
 
 		
