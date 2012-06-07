@@ -7,6 +7,12 @@ Compile the project
 ===================
     gcc -fopenmp -lm -o imgproj IO/bmpfile.c main.c
 
+// TODO: Ding, add your part here
+
+// TODO: Michael, add your part here
+
+// TODO: Haokun, add your part here
+
 Scaling
 ===================
     Scaling operation takes in a input image and a scale_factor
@@ -24,3 +30,7 @@ Scaling
     Exam multithreading on large input file:
        time ./imgproj -s scaling_samples/larg.bmp 2 (no parallelization)
        time ./imgproj -sp scaling_samples/larg.bmp 2 16 (16 threads)
+
+// TODO: Xin, add your part here
+
+// TODO: Ali, add your part here
