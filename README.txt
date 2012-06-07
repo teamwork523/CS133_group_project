@@ -53,6 +53,21 @@ Scaling
        time ./imgproj -s scaling_samples/larg.bmp 2 (no parallelization)
        time ./imgproj -sp scaling_samples/larg.bmp 2 16 (16 threads)
 
-// TODO: Xin, add your part here
+Gaussian Blur
+===================
+	Gaussian Blur operation takes in one input image path (either
+	relative or absolute) and a sigma value. For parallelism,
+	you can specify the nubmer of threads and chunk size as
+	parameters.
+
+	Command:
+    	./imgproj -g  img_name sigma
+		./imgproj -gp img_name sigma (N_threads N_chunk)
+         # Notice that N_threads and N_chunk are optional
+
+	If you run the sequential version, you will get an output
+	image under "src" folder, named "gaussian_blur_seq.bmp".
+	If you run the parallel version, you will get an output
+	image under "src" folder, named "gaussian_blur_parallel.bmp"
 
 // TODO: Ali, add your part here
