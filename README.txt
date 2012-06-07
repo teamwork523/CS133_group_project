@@ -14,7 +14,18 @@ File Location
 	Executable:   Execuatable file is under "src" folder after
 	              you compile the project.
 
-// TODO: Ding, add your part here
+Motion estimation
+===================
+	Motion operation takes in two input image path. For parallelism,
+	you can specify the nubmer of threadsas parameters.
+
+	Command:
+		./imgproj -m  img_path1 img_path2
+		./imgproj -mp img_path1 img_path2 (N_threads)
+		# Notice that N_threads is optional
+	
+	The output image is under "src" folder, named "bmp_out.bmp".
+	There is an additional "output.txt" file containing motion vectors.
 
 // TODO: Michael, add your part here
 
