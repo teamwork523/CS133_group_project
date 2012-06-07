@@ -18,6 +18,8 @@ Motion estimation
 ===================
 	Motion operation takes in two input image path. For parallelism,
 	you can specify the nubmer of threadsas parameters.
+	Notice that the size of the two input image must be the same, 
+	and the length and the height of the image must be dividable by 16.
 
 	Command:
 		./imgproj -m  img_path1 img_path2
