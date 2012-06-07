@@ -7,11 +7,33 @@ Compile the project
 ===================
     gcc -fopenmp -lm -o imgproj IO/bmpfile.c main.c
 
+File Location
+===================
+	Source Code:  All source codes are under "src" folder
+	Input Images: All input images are under "img" folder
+	Executable:   Execuatable file is under "src" folder after
+	              you compile the project.
+
 // TODO: Ding, add your part here
 
 // TODO: Michael, add your part here
 
-// TODO: Haokun, add your part here
+Rotation
+===================
+	Rotation operation takes in one input image path (either
+	relative or absolute) and a rotation degree. For parallelism,
+	you can specify the nubmer of threads and chunk size as
+	parameters.
+
+	Command:
+		./imgproj -r  img_name degree
+		./imgproj -rp img_name degree (N_threads N_chunk)
+		# Notice that N_threads and N_chunk are optional
+	
+	If you run the sequential version, you will get an output
+	image under "src" folder, named "bmp_rotation_seq.bmp".
+	If you run the parallel version, you will get an output
+	image under "src" folder, named "bmp_rotation_parallel.bmp"
 
 Scaling
 ===================
