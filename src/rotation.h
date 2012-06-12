@@ -28,7 +28,7 @@ struct timespec diff_timesp(struct timespec start, struct timespec end)
 
 int rotation(char* in_image_path, double deg){
     // start timer
-    clock_t start = clock();
+    //clock_t start = clock();
     
     // callibrate on deg
     while (deg >= 360.0)   deg -= 360.0;
@@ -90,9 +90,9 @@ int rotation(char* in_image_path, double deg){
     }
     
     // Print the time before main loop
-    clock_t end_setup = clock();
-    double setup_time = end_setup - start;
-    printf("Setup time is %.3lfs\n", setup_time / CLOCKS_PER_SEC );
+    //clock_t end_setup = clock();
+    //double setup_time = end_setup - start;
+    //printf("Setup time is %.3lfs\n", setup_time / CLOCKS_PER_SEC );
     
     int i,j;
     for (i = 0; i < out_width; ++i){
@@ -109,9 +109,9 @@ int rotation(char* in_image_path, double deg){
     }
     
     // Print the time after main loop
-    clock_t end_loop = clock();
-    double loop_time = end_loop - end_setup;
-    printf("Loop time is %.3lfs\n", loop_time / CLOCKS_PER_SEC );
+    //clock_t end_loop = clock();
+    //double loop_time = end_loop - end_setup;
+    //printf("Loop time is %.3lfs\n", loop_time / CLOCKS_PER_SEC );
     
     bmp_save(output_img, "bmp_rotation_seq.bmp");
     
@@ -119,18 +119,18 @@ int rotation(char* in_image_path, double deg){
     bmp_destroy(output_img);
     
     // Print the time after save image
-    clock_t end_save = clock();
-    double save_time = end_save - end_loop;
-    printf("Save time is %.3lfs\n", save_time / CLOCKS_PER_SEC );
-    printf("The ratio between saving and loop is %.3lf:1\n",  save_time/loop_time );
+    //clock_t end_save = clock();
+    //double save_time = end_save - end_loop;
+    //printf("Save time is %.3lfs\n", save_time / CLOCKS_PER_SEC );
+    //printf("The ratio between saving and loop is %.3lf:1\n",  save_time/loop_time );
     
     return 0;
 }
 
 int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int chunk_size){
     // define time struct
-    struct timespec start, end_setup, end_loop, end_save;
-    clock_gettime( CLOCK_REALTIME, &start);
+    //struct timespec start, end_setup, end_loop, end_save;
+    //clock_gettime( CLOCK_REALTIME, &start);
     
     // callibrate on deg
     while (deg >= 360.0)   deg -= 360.0;
@@ -192,9 +192,9 @@ int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int c
     }
     
     // before loop
-    clock_gettime( CLOCK_REALTIME, &end_setup);
-    struct timespec diff_time = diff_timesp(start, end_setup);
-    printf("Setup time is %.3lfs\n", (double)(diff_time.tv_sec+diff_time.tv_nsec/BILLION));
+    //clock_gettime( CLOCK_REALTIME, &end_setup);
+    //struct timespec diff_time = diff_timesp(start, end_setup);
+    //printf("Setup time is %.3lfs\n", (double)(diff_time.tv_sec+diff_time.tv_nsec/BILLION));
     
     // set the number of thread
     omp_set_num_threads(num_of_threads);
@@ -218,9 +218,9 @@ int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int c
     }
     
     // after loop
-    clock_gettime( CLOCK_REALTIME, &end_loop);
-    struct timespec loop_time = diff_timesp(end_setup, end_loop);
-    printf("Loop time is %.3lfs\n", (double)(loop_time.tv_sec+loop_time.tv_nsec/BILLION));
+    //clock_gettime( CLOCK_REALTIME, &end_loop);
+    //struct timespec loop_time = diff_timesp(end_setup, end_loop);
+    //printf("Loop time is %.3lfs\n", (double)(loop_time.tv_sec+loop_time.tv_nsec/BILLION));
     
     bmp_save(output_img, "bmp_rotation_parallel.bmp");
     
@@ -228,10 +228,10 @@ int rotation_parallel(char* in_image_path, double deg, int num_of_threads, int c
     bmp_destroy(output_img);
     
     // after saving image
-    clock_gettime( CLOCK_REALTIME, &end_save);
+    /*clock_gettime( CLOCK_REALTIME, &end_save);
     struct timespec save_time = diff_timesp(end_loop, end_save);
     printf("Save time is %.3lfs\n", (double)(save_time.tv_sec+save_time.tv_nsec/BILLION));
-    printf("The ratio between saving and loop is  %.3lf:1\n", ((double)(save_time.tv_sec+save_time.tv_nsec/BILLION))/((double)(loop_time.tv_sec+loop_time.tv_nsec/BILLION)));
+    printf("The ratio between saving and loop is  %.3lf:1\n", ((double)(save_time.tv_sec+save_time.tv_nsec/BILLION))/((double)(loop_time.tv_sec+loop_time.tv_nsec/BILLION)));*/
     
     return 0;
 }
