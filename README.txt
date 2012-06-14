@@ -10,7 +10,9 @@ Compile the project
 File Location
 ===================
 	Source Code:  All source codes are under "src" folder
-	Input Images: All input images are under "img" folder
+	Input Images: All input images are under "img" folder.
+				  Please use all images under the subfolders with operation 
+				  names to test our project.
 	Executable:   Execuatable file is under "src" folder after
 	              you compile the project.
 
