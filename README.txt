@@ -9,12 +9,14 @@ Compile the project
 
 File Location
 ===================
-	Source Code:  All source codes are under "src" folder
-	Input Images: All input images are under "img" folder.
-				  Please use all images under the subfolders with operation 
-				  names to test our project.
-	Executable:   Execuatable file is under "src" folder after
-	              you compile the project.
+	Source Code:   All source codes are under "src" folder
+	Input Images:  All input images are under "img" folder.
+				   Please use all images under the subfolders with operation
+				   names to test our project.
+	Output Images: All the output images will be under "src" folder with
+				   naming details in the following sections.
+	Executable:    Execuatable file is under "src" folder after
+	               you compile the project.
 
 Motion estimation
 ===================
@@ -67,6 +69,9 @@ Scaling
     Exam multithreading on large input file:
        time ./imgproj -s scaling_samples/larg.bmp 2 (no parallelization)
        time ./imgproj -sp scaling_samples/larg.bmp 2 16 (16 threads)
+
+	The output image is "scaling.bmp" under "src" folder for both
+	sequential and parallel version.
 
 Gaussian Blur
 ===================
