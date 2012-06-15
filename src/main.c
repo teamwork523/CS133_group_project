@@ -11,7 +11,7 @@
  * 1. Motion Estimation: ./imgProj -m img_path1 img_path2
  *                       ./imgProj -mp img_path1 img_path2 (num_threads chunk_size)
  * 2. Corner Detection:  ./imgProj -c img_path1
- *                       ./imgProj -cp img_path1 (num_threads chunk_size)
+ *                       ./imgProj -cp img_path1 (num_threads)
  * 3. Rotation:          ./imgProj -r img_path1 deg
  *                       ./imgProj -rp img_path1 deg (num_threads chunk_size)
  * 4. Scaling:           ./imgProj -s img_path1 scale_fac
@@ -57,7 +57,7 @@ void printUsage() {
     printf("> Run Corner Detection in sequential:\n>\
             ./imgProj -c img_path1\n");
     printf("> Run Corner Detection in parallel:\n>\
-            ./imgProj -cp img_path1 (num_threads chunk_size)\n");
+            ./imgProj -cp img_path1 (num_threads)\n");
     printf("> Run Rotation in sequential:\n>\
             ./imgProj -r img_path1 deg\n");
     printf("> Run Rotation in parallel:\n>\

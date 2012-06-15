@@ -39,7 +39,8 @@ Corner Detection
 	you can speciy the number of threads as parameters.
 
 	Command ./imgproj -c img_path
-		./imgproj -cp img_path N_threads
+		./imgproj -cp img_path (N_threads)
+		# Notice that N_threads is optional
 
 	The output image will be output in the current directory and is
 	named "corner.bmp". 
