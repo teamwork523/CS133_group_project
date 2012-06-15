@@ -33,7 +33,17 @@ Motion estimation
 	The output image is under "src" folder, named "bmp_out.bmp".
 	There is an additional "output.txt" file containing motion vectors.
 
-// TODO: Michael, add your part here
+Corner Detection
+===================
+	Corner detection takes in one input image path.  For parallelism,
+	you can speciy the number of threads as parameters.
+
+	Command ./imgproj -c img_path
+		./imgproj -cp img_path N_threads
+
+	The output image will be output in the current directory and is
+	named "corner.bmp". 
+
 
 Rotation
 ===================
