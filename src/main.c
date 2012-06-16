@@ -224,8 +224,12 @@ int main(int argc, char **argv) {
             // assign parameters
             input_img1 = argv[2];
             
-            // TODO: Ali, add your code here
-            
+            if(strcmp(argv[1], "-o") == 0){
+                detection(input_img1);
+            }
+            else{
+                detection_parallel(input_img1, num_threads, chunk_size);
+            }
         }
         else {
             if (argc == 6){
@@ -252,7 +256,8 @@ int main(int argc, char **argv) {
                 //------------------------------------------------------------------------
                 // Xin, add your sequential code here
                 gaussian_blur(input_img1, sigma);
-                // TODO: Ali, add your sequential code here
+                // Ali, add your sequential code here
+                detection(input_img1);
             }
             else if (argc >= 7 && argc <= 9 && !strcmp(argv[1], "-p")){
                 // assign parameters
@@ -284,7 +289,8 @@ int main(int argc, char **argv) {
                 //----------------------------------------------------------------------
                 // Xin, add your parallel code here
                 gaussian_blur_parallel(input_img1, sigma, num_threads, chunk_size);
-                // TODO: Ali, add your parallel code here
+                // Ali, add your parallel code here
+                detection_parallel(input_img1, num_threads, chunk_size);
             }
             else {
                 printf("Wrong option passed in or not enough parameters. Please refer the following usage.\n");
